@@ -4,26 +4,17 @@ export class Bank {
     // In this exercise I am assuming customer names are unique, else I would implement a unique CustomerNumber generator
     private Customers= new Array<Customer>();
 
-    constructor() {
-        this.Customers = new Array<Customer>();
-    }
-
     CheckTotalBalance(): number {
-        if (this.Customers.length === 0) {
-            console.log('No customer signed up.');
-            return 0;
-        } else {
-            let totalBalance = 0;
-            this.Customers.forEach(function (customer) {
-                totalBalance += customer.CheckBalance();
-            });
-            console.log('Total balance of the bank is: $' + totalBalance);
-            return totalBalance;
-        }
+        let totalBalance = 0;
+        this.Customers.forEach(function (customer) {
+            totalBalance += customer.CheckBalance();
+        });
+        console.log('Total balance of the bank is: $' + totalBalance);
+        return totalBalance;
     }
 
     SignUpCustomer(accountName: string, initialDeposit: number) {
-        let customer = new Customer(this, accountName, initialDeposit);
+        const customer = new Customer(this, accountName, initialDeposit);
         this.Customers.push(customer);
     }
 

@@ -6,37 +6,34 @@ export class Customer {
     private Balance: number;
 
     constructor(bank: Bank, accountName: string, initialDeposit: number) {
-        if (initialDeposit < 0) {
-            console.log('Initial deposit must be higher than $0.');
-            throw new Error ('Initial deposit lower than $0');
-        } else {
+        if (initialDeposit > 0) {
             this.Bank = bank;
             this.AccountName = accountName;
             this.Balance = initialDeposit;
+        } else {
+            console.log('Initial deposit must be higher than $0.');
+            throw new Error ('Initial deposit lower or equals to $0');
         }
     }
 
     Deposit(amount: number): void {
-        if (amount < 0) {
-            console.log('Amount deposited must be higher than $0.');
-            throw new Error ('Deposit lower than $0');
-        } else {
+        if (amount > 0) {
             this.Balance += amount;
             console.log('$' + amount + ' has been deposited for customer ' + this.AccountName);
+        } else {
+            console.log('Amount deposited must be higher than $0.');
+            throw new Error ('Deposit lower or equals to $0');
         }
     }
 
-    // private so only this account can withdraw
     Withdraw(amount: number): void {
-        if (this.Balance < amount) {
+        if (amount <= 0) {
+            console.log('Amount withdrawn must be higher than $0.');
+            throw new Error('Withdrawal lower or equals to $0');
+        } else if (this.Balance < amount) {
             console.log(this.AccountName + ' has insufficient Fund.');
             throw new Error ('Insufficient Fund.');
-        }
-        else if (amount < 0) {
-            console.log('Amount withdrawn must be higher than $0.');
-            throw new Error ('Withdrawal lower than $0');
-        }
-        else {
+        } else {
             this.Balance -= amount;
             console.log('$' + amount + ' has been withdrawn from customer ' + this.AccountName);
         }
@@ -47,14 +44,14 @@ export class Customer {
         return this.Balance;
     }
 
-    Transfer(accountName: string, amount: number) {
-        if (amount < 0) {
-            console.log('Amount transferred must be higher than $0.');
-            throw new Error ('Transfer amount lower than $0');
-        } else {
+    Transfer(bank: Bank, accountName: string, amount: number) {
+        if (amount > 0) {
             this.Withdraw(amount);
-            this.Bank.FindCustomer(accountName).Deposit(amount);
+            bank.FindCustomer(accountName).Deposit(amount);
             console.log('$' + amount + ' has been transferred to ' + accountName)
+        } else {
+            console.log('Amount transferred must be higher than $0.');
+            throw new Error ('Transfer amount lower or equals to $0');
         }
     }
 }
